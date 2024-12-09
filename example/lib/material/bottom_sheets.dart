@@ -1,17 +1,17 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
-import 'main.dart';
+import '../main.dart';
+
+import '../user_model.dart';
 import 'dialogs.dart';
 
-import 'user_model.dart';
-
-class BottomSheetExamplesPage extends StatefulWidget {
+class MaterialBottomSheetExamplesPage extends StatefulWidget {
   @override
-  State<BottomSheetExamplesPage> createState() =>
-      _BottomSheetExamplesPageState();
+  State<MaterialBottomSheetExamplesPage> createState() =>
+      _MaterialBottomSheetExamplesPageState();
 }
 
-class _BottomSheetExamplesPageState extends State<BottomSheetExamplesPage> {
+class _MaterialBottomSheetExamplesPageState extends State<MaterialBottomSheetExamplesPage> {
   final _formKey = GlobalKey<FormState>();
   final _dropDownCustomBGKey = GlobalKey<DropdownSearchState<String>>();
   final _userEditTextController = TextEditingController(text: 'Mrs');
@@ -97,7 +97,7 @@ class _BottomSheetExamplesPageState extends State<BottomSheetExamplesPage> {
                           filled: true,
                         ),
                       ),
-                      popupProps: PopupPropsMultiSelection.bottomSheet(
+                      popupProps: PopupProps.bottomSheet(
                         disabledItemFn: (int i) => i <= 3,
                       ),
                     ),
@@ -115,13 +115,13 @@ class _BottomSheetExamplesPageState extends State<BottomSheetExamplesPage> {
                     child: DropdownSearch<UserModel>(
                       items: (filter, t) => getData(filter),
                       compareFn: (i, s) => i.isEqual(s),
-                      popupProps: PopupPropsMultiSelection.bottomSheet(
+                      popupProps: PopupProps.bottomSheet(
                         showSelectedItems: true,
                         showSearchBox: true,
                         itemBuilder: userModelPopupItem,
-                        suggestedItemProps: SuggestedItemProps(
-                          showSuggestedItems: true,
-                          suggestedItems: (us) {
+                        suggestionsProps: SuggestionsProps(
+                          showSuggestions: true,
+                          items: (us) {
                             return us
                                 .where((e) => e.name.contains("Mrs"))
                                 .toList();
@@ -135,40 +135,17 @@ class _BottomSheetExamplesPageState extends State<BottomSheetExamplesPage> {
                     child: DropdownSearch<UserModel>.multiSelection(
                       items: (filter, s) => getData(filter),
                       compareFn: (i, s) => i.isEqual(s),
-                      popupProps: PopupPropsMultiSelection.bottomSheet(
+                      popupProps: MultiSelectionPopupProps.bottomSheet(
                         showSearchBox: true,
                         itemBuilder: userModelPopupItem,
-                        suggestedItemProps: SuggestedItemProps(
-                          showSuggestedItems: true,
-                          suggestedItems: (us) {
+                        suggestionsProps: SuggestionsProps(
+                          showSuggestions: true,
+                          items: (us) {
                             return us
                                 .where((e) => e.name.contains("Mrs"))
                                 .toList();
                           },
-                          suggestedItemBuilder: (context, item, isSelected) {
-                            return Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 6),
-                              margin: EdgeInsets.only(left: 8),
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.grey),
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.grey[100]),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    item.name,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(color: Colors.indigo),
-                                  ),
-                                  Padding(padding: EdgeInsets.only(left: 8)),
-                                  isSelected
-                                      ? Icon(Icons.check_box_outlined)
-                                      : SizedBox.shrink(),
-                                ],
-                              ),
-                            );
-                          },
+                          itemProps: SuggestedItemProps(),
                         ),
                       ),
                     ),
@@ -183,7 +160,7 @@ class _BottomSheetExamplesPageState extends State<BottomSheetExamplesPage> {
               DropdownSearch<String>.multiSelection(
                 key: _dropDownCustomBGKey,
                 items: (f, cs) => List.generate(30, (index) => "$index"),
-                popupProps: PopupPropsMultiSelection.bottomSheet(
+                popupProps: MultiSelectionPopupProps.bottomSheet(
                   bottomSheetProps:
                       BottomSheetProps(backgroundColor: Colors.grey.shade200),
                   showSearchBox: true,
@@ -247,7 +224,7 @@ class _BottomSheetExamplesPageState extends State<BottomSheetExamplesPage> {
                       items: (filter, t) => getData(filter),
                       suffixProps: DropdownSuffixProps(
                           clearButtonProps: ClearButtonProps(isVisible: true)),
-                      popupProps: PopupPropsMultiSelection.bottomSheet(
+                      popupProps: MultiSelectionPopupProps.bottomSheet(
                         showSelectedItems: true,
                         itemBuilder: userModelPopupItem,
                         showSearchBox: true,
@@ -265,6 +242,7 @@ class _BottomSheetExamplesPageState extends State<BottomSheetExamplesPage> {
                           item.id == selectedItem.id,
                       decoratorProps: DropDownDecoratorProps(
                         decoration: InputDecoration(
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
                           labelText: 'Users *',
                           filled: true,
                           fillColor:
@@ -278,7 +256,7 @@ class _BottomSheetExamplesPageState extends State<BottomSheetExamplesPage> {
                   Expanded(
                     child: DropdownSearch<UserModel>(
                       items: (filter, t) => getData(filter),
-                      popupProps: PopupPropsMultiSelection.bottomSheet(
+                      popupProps: PopupProps.bottomSheet(
                         showSelectedItems: true,
                         itemBuilder: userModelPopupItem,
                         showSearchBox: true,

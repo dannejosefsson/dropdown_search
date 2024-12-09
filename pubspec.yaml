@@ -1,19 +1,27 @@
 name: dropdown_search
-description: Simple and reactive Searchable Dropdown with item search feature, making it possible to use an sync/async item for easy customization.
-version: 6.0.1
+description: Simple, reactive and highly customizable Flutter Dropdown with a lot of features (search, adaptive platform, async/sync values, ...) with multi dropdown mode like menu, modal, dialog, bottomSheet and etc.
+version: 7.0.0-pre
 homepage: https://github.com/salim-lachdhaf
-git: https://github.com/salim-lachdhaf/searchable_dropdown
-repository: https://github.com/salim-lachdhaf/searchable_dropdown
+git: https://github.com/salim-lachdhaf/dropdown_search
+repository: https://github.com/salim-lachdhaf/dropdown_search
 
 environment:
   sdk: ">=2.17.0 <4.0.0"
 
 
 dependencies:
+  cupertino_icons: ^1.0.8
   flutter:
     sdk: flutter
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  lints: ^4.0.0
+  lints: ^5.1.0
+
+topics:
+  - dropdown
+  - autocomplete
+  - form
+  - material
+  - adaptive

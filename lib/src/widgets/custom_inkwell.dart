@@ -1,4 +1,4 @@
-import 'package:dropdown_search/dropdown_search.dart';
+import 'package:dropdown_search/src/properties/click_props.dart';
 import 'package:flutter/material.dart';
 
 class CustomInkWell extends StatelessWidget {
@@ -47,6 +47,7 @@ class CustomInkWell extends StatelessWidget {
       containedInkWell: clickProps.containedInkWell,
       highlightShape: clickProps.highlightShape,
       onTap: onTap,
+      focusNode: clickProps.focusNode,
       child: child,
     );
   }

@@ -1,5 +1,5 @@
 import 'package:dropdown_search/src/properties/scroll_props.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class CustomSingleScrollView extends StatelessWidget {
   final ScrollProps scrollProps;
@@ -21,7 +21,7 @@ class CustomSingleScrollView extends StatelessWidget {
       hitTestBehavior: scrollProps.hitTestBehavior,
       keyboardDismissBehavior: scrollProps.keyboardDismissBehavior,
       physics: scrollProps.physics,
-      scrollDirection: scrollProps.scrollDirection,
+      scrollDirection: Axis.vertical,
       reverse: scrollProps.reverse,
       primary: scrollProps.primary,
       child: child,

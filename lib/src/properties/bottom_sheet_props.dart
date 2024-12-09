@@ -1,4 +1,7 @@
-import 'package:flutter/material.dart';
+import 'dart:ui';
+
+import 'package:dropdown_search/src/properties/safe_area_props.dart';
+import 'package:flutter/cupertino.dart';
 
 class BottomSheetProps {
   final ShapeBorder? shape;
@@ -21,5 +24,39 @@ class BottomSheetProps {
     this.constraints,
     this.showDragHandle,
     this.sheetAnimationStyle,
+  });
+}
+
+class CupertinoBottomSheetProps {
+  final bool useRootNavigator;
+  final ImageFilter? filter;
+  final bool barrierDismissible;
+  final bool semanticsDismissible;
+  final RouteSettings? routeSettings;
+  final bool isSurfacePainted;
+  final Offset? anchorPoint;
+  final Color barrierLabel;
+  final SafeAreaProps safeAreaProps;
+
+  const CupertinoBottomSheetProps({
+    this.anchorPoint,
+    this.routeSettings,
+    this.isSurfacePainted = true,
+    this.filter,
+    this.barrierDismissible = true,
+    this.semanticsDismissible = false,
+    this.useRootNavigator = false,
+    this.barrierLabel = kCupertinoModalBarrierColor,
+    this.safeAreaProps = const SafeAreaProps(),
+  });
+}
+
+class AdaptiveBottomSheetProps {
+  final CupertinoBottomSheetProps cupertinoProps;
+  final BottomSheetProps materialProps;
+
+  const AdaptiveBottomSheetProps({
+    this.cupertinoProps = const CupertinoBottomSheetProps(),
+    this.materialProps = const BottomSheetProps(),
   });
 }

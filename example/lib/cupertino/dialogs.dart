@@ -1,20 +1,21 @@
+import 'dart:math';
+
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:example/main.dart';
+import 'package:example/user_model.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'main.dart';
-import 'user_model.dart';
-
-class DialogExamplesPage extends StatefulWidget {
+class CupertinoDialogExamplesPage extends StatefulWidget {
   @override
-  State<DialogExamplesPage> createState() => _DialogExamplesPageState();
+  State<CupertinoDialogExamplesPage> createState() => _CupertinoDialogExamplesPageState();
 }
 
-class _DialogExamplesPageState extends State<DialogExamplesPage> {
+class _CupertinoDialogExamplesPageState extends State<CupertinoDialogExamplesPage> {
   final _formKey = GlobalKey<FormState>();
   final _dropDownCustomBGKey = GlobalKey<DropdownSearchState<String>>();
   final _userEditTextController = TextEditingController(text: 'Mrs');
-  final _dropdownMultiLevelKey =
-      GlobalKey<DropdownSearchState<MultiLevelString>>();
+  final _dropdownMultiLevelKey = GlobalKey<DropdownSearchState<MultiLevelString>>();
   final List<MultiLevelString> myMultiLevelItems = [
     MultiLevelString(level1: "1"),
     MultiLevelString(level1: "2"),
@@ -35,7 +36,7 @@ class _DialogExamplesPageState extends State<DialogExamplesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("DropdownSearch Dialog Demo")),
+      appBar: AppBar(title: Text("CupertinoDropdownSearch Dialog Demo")),
       body: Padding(
         padding: const EdgeInsets.all(25),
         child: Form(
@@ -50,31 +51,17 @@ class _DialogExamplesPageState extends State<DialogExamplesPage> {
               Row(
                 children: [
                   Expanded(
-                    child: DropdownSearch<int>(
+                    child: CupertinoDropdownSearch<int>(
                       items: (f, cs) => List.generate(30, (i) => i + 1),
                       decoratorProps: DropDownDecoratorProps(
-                        decoration: InputDecoration(
-                            labelText: "Dialog with title",
-                            hintText: "Select an Int"),
+                        decoration: InputDecoration(labelText: "Dialog with title", hintText: "Select an Int"),
                       ),
-                      popupProps: PopupProps.dialog(
+                      popupProps: CupertinoPopupProps.dialog(
                         title: Container(
-                          decoration: BoxDecoration(color: Colors.deepPurple),
                           alignment: Alignment.center,
-                          padding: EdgeInsets.symmetric(vertical: 16),
                           child: Text(
                             'Numbers 1..30',
-                            style: TextStyle(
-                                fontSize: 21,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white70),
-                          ),
-                        ),
-                        dialogProps: DialogProps(
-                          clipBehavior: Clip.antiAlias,
-                          shape: OutlineInputBorder(
-                            borderSide: BorderSide(width: 0),
-                            borderRadius: BorderRadius.circular(25),
+                            style: TextStyle(fontSize: 21, fontWeight: FontWeight.bold),
                           ),
                         ),
                       ),
@@ -82,7 +69,7 @@ class _DialogExamplesPageState extends State<DialogExamplesPage> {
                   ),
                   Padding(padding: EdgeInsets.all(4)),
                   Expanded(
-                    child: DropdownSearch<int>(
+                    child: CupertinoDropdownSearch<int>(
                       items: (f, cs) => [1, 2, 3, 4, 5, 6, 7],
                       decoratorProps: DropDownDecoratorProps(
                         decoration: InputDecoration(
@@ -91,7 +78,7 @@ class _DialogExamplesPageState extends State<DialogExamplesPage> {
                           filled: true,
                         ),
                       ),
-                      popupProps: PopupPropsMultiSelection.dialog(
+                      popupProps: CupertinoPopupProps.dialog(
                         disabledItemFn: (int i) => i <= 3,
                       ),
                     ),
@@ -106,19 +93,18 @@ class _DialogExamplesPageState extends State<DialogExamplesPage> {
               Row(
                 children: [
                   Expanded(
-                    child: DropdownSearch<UserModel>(
+                    child: CupertinoDropdownSearch<UserModel>(
                       items: (filter, t) => getData(filter),
                       compareFn: (i, s) => i.isEqual(s),
-                      popupProps: PopupPropsMultiSelection.dialog(
+                      popupProps: CupertinoPopupProps.dialog(
+                        disabledItemFn: (item) => item.name.contains('Am'),
                         showSelectedItems: true,
                         showSearchBox: true,
                         itemBuilder: userModelPopupItem,
-                        suggestedItemProps: SuggestedItemProps(
-                          showSuggestedItems: true,
-                          suggestedItems: (us) {
-                            return us
-                                .where((e) => e.name.contains("Mrs"))
-                                .toList();
+                        suggestionsProps: SuggestionsProps(
+                          showSuggestions: true,
+                          items: (us) {
+                            return us.where((e) => e.name.contains("e")).toList();
                           },
                         ),
                       ),
@@ -126,43 +112,20 @@ class _DialogExamplesPageState extends State<DialogExamplesPage> {
                   ),
                   Padding(padding: EdgeInsets.all(4)),
                   Expanded(
-                    child: DropdownSearch<UserModel>.multiSelection(
-                      items: (filter, s) => getData(filter),
-                      compareFn: (i, s) => i.isEqual(s),
-                      popupProps: PopupPropsMultiSelection.dialog(
-                        showSearchBox: true,
-                        itemBuilder: userModelPopupItem,
-                        suggestedItemProps: SuggestedItemProps(
-                          showSuggestedItems: true,
-                          suggestedItems: (us) {
-                            return us
-                                .where((e) => e.name.contains("Mrs"))
-                                .toList();
-                          },
-                          suggestedItemBuilder: (context, item, isSelected) {
-                            return Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 6),
-                              margin: EdgeInsets.only(left: 8),
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.grey),
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.grey[100]),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    item.name,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(color: Colors.indigo),
-                                  ),
-                                  Padding(padding: EdgeInsets.only(left: 8)),
-                                  isSelected
-                                      ? Icon(Icons.check_box_outlined)
-                                      : SizedBox.shrink(),
-                                ],
-                              ),
-                            );
-                          },
+                    child: Theme(
+                      data: ThemeData(primaryColorLight: Colors.red),
+                      child: CupertinoDropdownSearch<UserModel>.multiSelection(
+                        items: (filter, s) => getData(filter),
+                        compareFn: (i, s) => i.isEqual(s),
+                        popupProps: CupertinoMultiSelectionPopupProps.dialog(
+                          showSearchBox: true,
+                          itemBuilder: userModelPopupItem,
+                          suggestionsProps: SuggestionsProps(
+                            showSuggestions: true,
+                            items: (us) {
+                              return us.where((e) => e.name.contains("Mrs")).toList();
+                            },
+                          ),
                         ),
                       ),
                     ),
@@ -182,47 +145,34 @@ class _DialogExamplesPageState extends State<DialogExamplesPage> {
                   ),
                   Padding(padding: EdgeInsets.all(4)),
                   Expanded(
-                    child: DropdownSearch<String>.multiSelection(
+                    child: CupertinoDropdownSearch<String>.multiSelection(
                       key: _dropDownCustomBGKey,
                       items: (f, cs) => List.generate(30, (index) => "$index"),
-                      popupProps: PopupPropsMultiSelection.dialog(
+                      popupProps: CupertinoMultiSelectionPopupProps.dialog(
                         showSearchBox: true,
                         containerBuilder: (ctx, popupWidget) {
                           return Column(
                             children: [
                               Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.end,
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Padding(
-                                    padding: EdgeInsets.all(8),
-                                    child: OutlinedButton(
-                                      onPressed: () {
-                                        // How should I unselect all items in the list?
-                                        _dropDownCustomBGKey.currentState
-                                            ?.closeDropDownSearch();
-                                      },
-                                      child: const Text('Cancel'),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.all(8),
+                                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                     child: OutlinedButton(
                                       onPressed: () {
                                         // How should I select all items in the list?
-                                        _dropDownCustomBGKey.currentState
-                                            ?.popupSelectAllItems();
+                                        _dropDownCustomBGKey.currentState?.popupSelectAllItems();
                                       },
                                       child: const Text('All'),
                                     ),
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.all(8),
+                                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                     child: OutlinedButton(
                                       onPressed: () {
                                         // How should I unselect all items in the list?
-                                        _dropDownCustomBGKey.currentState
-                                            ?.popupDeselectAllItems();
+                                        _dropDownCustomBGKey.currentState?.popupDeselectAllItems();
                                       },
                                       child: const Text('None'),
                                     ),
@@ -246,32 +196,28 @@ class _DialogExamplesPageState extends State<DialogExamplesPage> {
               Row(
                 children: [
                   Expanded(
-                    child: DropdownSearch<UserModel>.multiSelection(
+                    child: CupertinoDropdownSearch<UserModel>.multiSelection(
                       items: (filter, t) => getData(filter),
-                      suffixProps: DropdownSuffixProps(
-                          clearButtonProps: ClearButtonProps(isVisible: true)),
-                      popupProps: PopupPropsMultiSelection.dialog(
+                      suffixProps: DropdownSuffixProps(clearButtonProps: ClearButtonProps(isVisible: true)),
+                      popupProps: CupertinoMultiSelectionPopupProps.dialog(
                         showSelectedItems: true,
                         itemBuilder: userModelPopupItem,
                         showSearchBox: true,
-                        searchFieldProps: TextFieldProps(
+                        searchFieldProps: CupertinoTextFieldProps(
                           controller: _userEditTextController,
-                          decoration: InputDecoration(
-                            suffixIcon: IconButton(
-                              icon: Icon(Icons.clear),
-                              onPressed: () => _userEditTextController.clear(),
-                            ),
+                          suffix: IconButton(
+                            icon: Icon(Icons.clear),
+                            onPressed: () => _userEditTextController.clear(),
                           ),
                         ),
                       ),
-                      compareFn: (item, selectedItem) =>
-                          item.id == selectedItem.id,
+                      compareFn: (item, selectedItem) => item.id == selectedItem.id,
                       decoratorProps: DropDownDecoratorProps(
                         decoration: InputDecoration(
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
                           labelText: 'Users *',
                           filled: true,
-                          fillColor:
-                              Theme.of(context).inputDecorationTheme.fillColor,
+                          fillColor: Theme.of(context).inputDecorationTheme.fillColor,
                         ),
                       ),
                       dropdownBuilder: customDropDownExampleMultiSelection,
@@ -279,9 +225,9 @@ class _DialogExamplesPageState extends State<DialogExamplesPage> {
                   ),
                   Padding(padding: EdgeInsets.all(4)),
                   Expanded(
-                    child: DropdownSearch<UserModel>(
+                    child: CupertinoDropdownSearch<UserModel>(
                       items: (filter, t) => getData(filter),
-                      popupProps: PopupPropsMultiSelection.dialog(
+                      popupProps: CupertinoPopupProps.dialog(
                         showSelectedItems: true,
                         itemBuilder: userModelPopupItem,
                         showSearchBox: true,
@@ -291,8 +237,7 @@ class _DialogExamplesPageState extends State<DialogExamplesPage> {
                         decoration: InputDecoration(
                           labelText: 'User *',
                           filled: true,
-                          fillColor:
-                              Theme.of(context).inputDecorationTheme.fillColor,
+                          fillColor: Theme.of(context).inputDecorationTheme.fillColor,
                         ),
                       ),
                     ),
@@ -304,11 +249,11 @@ class _DialogExamplesPageState extends State<DialogExamplesPage> {
               Padding(padding: EdgeInsets.all(16)),
               Text("[multiLevel items example]"),
               Divider(),
-              DropdownSearch<MultiLevelString>(
+              CupertinoDropdownSearch<MultiLevelString>(
                 key: _dropdownMultiLevelKey,
                 items: (f, cs) => myMultiLevelItems,
                 compareFn: (i1, i2) => i1.level1 == i2.level1,
-                popupProps: PopupProps.dialog(
+                popupProps: CupertinoPopupProps.dialog(
                   showSelectedItems: true,
                   interceptCallBacks: true, //important line
                   itemBuilder: (ctx, item, isDisabled, isSelected) {
@@ -322,16 +267,14 @@ class _DialogExamplesPageState extends State<DialogExamplesPage> {
                                   icon: Icon(Icons.arrow_drop_down),
                                   onPressed: () {
                                     item.isExpanded = !item.isExpanded;
-                                    _dropdownMultiLevelKey.currentState
-                                        ?.updatePopupState();
+                                    _dropdownMultiLevelKey.currentState?.updatePopupState();
                                   },
                                 )
                               : IconButton(
                                   icon: Icon(Icons.arrow_right),
                                   onPressed: () {
                                     item.isExpanded = !item.isExpanded;
-                                    _dropdownMultiLevelKey.currentState
-                                        ?.updatePopupState();
+                                    _dropdownMultiLevelKey.currentState?.updatePopupState();
                                   },
                                 )),
                       subtitle: item.subLevel.isNotEmpty && item.isExpanded
@@ -341,15 +284,10 @@ class _DialogExamplesPageState extends State<DialogExamplesPage> {
                                 children: item.subLevel
                                     .map(
                                       (e) => ListTile(
-                                        selected: _dropdownMultiLevelKey
-                                                .currentState
-                                                ?.getSelectedItem
-                                                ?.level1 ==
-                                            e.level1,
+                                        selected: _dropdownMultiLevelKey.currentState?.getSelectedItem?.level1 == e.level1,
                                         title: Text(e.level1),
                                         onTap: () {
-                                          _dropdownMultiLevelKey.currentState
-                                              ?.popupValidate([e]);
+                                          _dropdownMultiLevelKey.currentState?.popupValidate([e]);
                                         },
                                       ),
                                     )
@@ -357,8 +295,7 @@ class _DialogExamplesPageState extends State<DialogExamplesPage> {
                               ),
                             )
                           : null,
-                      onTap: () => _dropdownMultiLevelKey.currentState
-                          ?.popupValidate([item]),
+                      onTap: () => _dropdownMultiLevelKey.currentState?.popupValidate([item]),
                     );
                   },
                 ),
@@ -376,38 +313,34 @@ class DropdownWithGlobalCheckBox extends StatefulWidget {
   State<StatefulWidget> createState() => _DropdownWithGlobalCheckBoxState();
 }
 
-class _DropdownWithGlobalCheckBoxState
-    extends State<DropdownWithGlobalCheckBox> {
+class _DropdownWithGlobalCheckBoxState extends State<DropdownWithGlobalCheckBox> {
   final _infiniteScrollDropDownKey = GlobalKey<DropdownSearchState<int>>();
-  final ValueNotifier<bool?> longListCheckBoxValueNotifier =
-      ValueNotifier(false);
-  final longList = List.generate(110, (i) => i + 1);
+  final ValueNotifier<bool?> longListCheckBoxValueNotifier = ValueNotifier(false);
+  final longList = List.generate(500, (i) => i + 1);
 
   bool? _getCheckBoxState() {
-    var selectedItem =
-        _infiniteScrollDropDownKey.currentState?.popupGetSelectedItems ?? [];
-    var isAllSelected =
-        _infiniteScrollDropDownKey.currentState?.popupIsAllItemSelected ??
-            false;
+    var selectedItem = _infiniteScrollDropDownKey.currentState?.popupGetSelectedItems ?? [];
+    var isAllSelected = _infiniteScrollDropDownKey.currentState?.popupIsAllItemSelected ?? false;
     return selectedItem.isEmpty ? false : (isAllSelected ? true : null);
   }
 
   ///simulate an API call
-  Future<List<int>> _getData(String filter, LoadProps? loadProps) {
-    return Future.delayed(Duration(seconds: 1), () {
-      var list = filter.isEmpty
-          ? longList
-          : longList.where((l) => l.toString().contains(filter));
+  Future<List<int>> _getData(String filter, LoadProps loadProps) async {
+    await Future.delayed(Duration(seconds: 5));
+    //simulate random error
+    final errorIndex = Random().nextInt(100);
+    if (errorIndex <= loadProps.skip) throw Exception('Sorry, An error occurred !');
 
-      return list.skip(loadProps!.skip).take(loadProps.take).toList();
-    });
+    var list = filter.isEmpty ? longList : longList.where((l) => l.toString().contains(filter));
+
+    return list.skip(loadProps.skip).take(loadProps.take).toList();
   }
 
   @override
   Widget build(BuildContext context) {
-    return DropdownSearch<int>.multiSelection(
+    return CupertinoDropdownSearch<int>.multiSelection(
       key: _infiniteScrollDropDownKey,
-      items: (f, ic) => _getData(f, ic),
+      items: (filter, loadProps) => _getData(filter, loadProps!),
       decoratorProps: DropDownDecoratorProps(
         decoration: InputDecoration(
           border: OutlineInputBorder(),
@@ -415,25 +348,33 @@ class _DropdownWithGlobalCheckBoxState
           contentPadding: EdgeInsets.fromLTRB(12, 12, 0, 0),
         ),
       ),
-      popupProps: PopupPropsMultiSelection.dialog(
-        onItemAdded: (l, s) =>
-            longListCheckBoxValueNotifier.value = _getCheckBoxState(),
-        onItemRemoved: (l, s) =>
-            longListCheckBoxValueNotifier.value = _getCheckBoxState(),
-        onItemsLoaded: (value) =>
-            longListCheckBoxValueNotifier.value = _getCheckBoxState(),
-        infiniteScrollProps:
-            InfiniteScrollProps(loadProps: LoadProps(skip: 0, take: 10)),
+      popupProps: CupertinoMultiSelectionPopupProps.dialog(
+        onItemAdded: (l, s) => longListCheckBoxValueNotifier.value = _getCheckBoxState(),
+        onItemRemoved: (l, s) => longListCheckBoxValueNotifier.value = _getCheckBoxState(),
+        onItemsLoaded: (value) => longListCheckBoxValueNotifier.value = _getCheckBoxState(),
+        infiniteScrollProps: InfiniteScrollProps(
+          loadProps: LoadProps(skip: 0, take: 10),
+          errorBuilder: (context, searchEntry, exception, loadProps) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text('$exception'),
+                TextButton.icon(
+                  onPressed: () {
+                    _infiniteScrollDropDownKey.currentState?.getPopupState?.loadMoreItems(searchEntry, loadProps.skip);
+                  },
+                  icon: Icon(Icons.sync),
+                  label: Text('reload'),
+                )
+              ],
+            );
+          },
+        ),
         showSearchBox: true,
         containerBuilder: (ctx, popupWidget) {
           return Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(24)),
-              gradient: LinearGradient(
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
-                colors: [Color(0xF44336), Colors.blue],
-              ),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -447,17 +388,15 @@ class _DropdownWithGlobalCheckBoxState
                       ValueListenableBuilder(
                         valueListenable: longListCheckBoxValueNotifier,
                         builder: (context, value, child) {
-                          return Checkbox(
+                          return CupertinoCheckbox(
                             value: longListCheckBoxValueNotifier.value,
                             tristate: true,
                             onChanged: (bool? v) {
                               v ??= false;
                               if (v == true) {
-                                _infiniteScrollDropDownKey.currentState
-                                    ?.popupSelectAllItems();
+                                _infiniteScrollDropDownKey.currentState?.popupSelectAllItems();
                               } else if (v == false) {
-                                _infiniteScrollDropDownKey.currentState
-                                    ?.popupDeselectAllItems();
+                                _infiniteScrollDropDownKey.currentState?.popupDeselectAllItems();
                               }
                               longListCheckBoxValueNotifier.value = v;
                             },
@@ -477,8 +416,7 @@ class _DropdownWithGlobalCheckBoxState
   }
 }
 
-Widget customDropDownExampleMultiSelection(
-    BuildContext context, List<UserModel> selectedItems) {
+Widget customDropDownExampleMultiSelection(BuildContext context, List<UserModel> selectedItems) {
   if (selectedItems.isEmpty) {
     return ListTile(
       contentPadding: EdgeInsets.all(0),
@@ -504,10 +442,8 @@ Widget customDropDownExampleMultiSelection(
   );
 }
 
-Widget userModelPopupItem(
-    BuildContext context, UserModel item, bool isDisabled, bool isSelected) {
+Widget userModelPopupItem(BuildContext context, UserModel item, bool isDisabled, bool isSelected) {
   return Container(
-    margin: EdgeInsets.symmetric(horizontal: 8),
     decoration: !isSelected
         ? null
         : BoxDecoration(
@@ -516,6 +452,7 @@ Widget userModelPopupItem(
             color: Colors.white,
           ),
     child: ListTile(
+      contentPadding: EdgeInsets.zero,
       selected: isSelected,
       title: Text(item.name),
       subtitle: Text(item.createdAt.toString()),

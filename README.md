@@ -4,7 +4,7 @@
 </h1>
 
 <h4 align="center">
-  Simple and reactive DropdownSearch with item search feature, making it possible to use an offline item list or filtering URL for easy customization.
+  Simple and highly customizable Flutter Dropdown with a lot of features (search, adaptive, async/sync values, ...) with multi mode like menu, modal, dialog, bottomSheet and etc.
 </h4>
 
 <p align="center">
@@ -35,14 +35,10 @@
 * Sync and/or Async items (online, offline, DB, ...)
 * Searchable dropdown
 * Support multi level items
-* Four dropdown mode: Menu/ BottomSheet/ ModalBottomSheet / Dialog
+* Five dropdown modes: Menu / BottomSheet / ModalBottomSheet / Dialog / autocomplete
 * Single & multi selection
-* Material dropdown
-* Adaptive UI : Material, IOS ```[coming soon]```
+* Adaptive platform UI : Material, Adaptive, Cupertino
 * Easy customizable UI - No Boilerplate
-* Handle Light and Dark theme
-* Easy implementation into statelessWidget
-
 
 <br>
 <table>
@@ -73,6 +69,35 @@ dropdown_search: <lastest version>
 ## Import
 ```dart
 import 'package:dropdown_search/dropdown_search.dart';
+```
+
+## Adaptive Platform UI
+* To use Material ui (_**by default**_) use `DropdownSearch<T>(...)` or  `DropdownSearch<T>.multiSelection(...)`
+* for the cupertino mode use `CupertinoDropdownSearch<T>(...)` or  `CupertinoDropdownSearch<T>.multiSelection(...)`
+* To let the package pick the suitable platform UI based on the used platform, use `AdaptiveDropdownSearch<T>(...)` or  `AdaptiveDropdownSearch<T>.multiSelection(...)`
+
+
+* **_Bonus Tip_**: with adaptive platform ui you can use different PopupMode depending on platform type:
+```dart
+AdaptiveDropdownSearch<T>(
+    popupProps: AdaptivePopupProps(
+        cupertinoProps: CupertinoPopupProps.bottomSheet(),
+        materialProps: PopupProps.dialog()
+    ),
+)
+```
+
+## Infinite Scroll
+To enable infinite scroll all you have to do is to declare `infiniteScrollProps` and of course don't forget to pass loadProps to your API like this:
+```dart
+DropdownSearch<T>(
+    items: (filter, loadProps) => _getDataFromAPI(filter, loadProps!.skip, loadProps!.take),
+    popupProps: PopupProps.dialog(
+        infiniteScrollProps: InfiniteScrollProps(
+            loadProps: LoadProps(skip: 0, take: 10),
+        ),
+    ),
+)
 ```
 
 
@@ -112,7 +137,7 @@ DropdownSearch<(String, Color)>(
     ("Yellow", Colors.yellow),
     ('Blue', Colors.blue),
   ],
-  compareFn: (item1, item2) => item1.$1 == item2.$2,
+  compareFn: (item1, item2) => item1.$1 == item2.$1,
   popupProps: PopupProps.menu(
   menuProps: MenuProps(align: MenuAlign.bottomCenter),
     fit: FlexFit.loose,

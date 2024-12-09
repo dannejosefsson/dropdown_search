@@ -1,3 +1,62 @@
+## [7.0.0-pre] - 2024.12.07
+* #### New Feature:
+  * Add adaptive platform Ui feature: `Material`, `Cupertino` and `Adaptive`
+  * add `transitionBuilder`, `transitionDuration`, `reverseTransitionDuration` to `menuProps`
+
+    ```dart
+      transitionDuration: Duration(milliseconds: 500),
+      transitionBuilder: (context, animation, secondaryAnimation, child) {
+        return SlideTransition(
+          position: Tween<Offset>(
+            begin: const Offset(1, 0),
+            end: Offset.zero,
+          ).animate(animation),
+          child: child,
+        );
+      }
+    ```
+    
+  * add new property `animationBuilder` to `DropdownButtonProps`, examples of uses
+   ```dart
+      /* Example 1: animation with only one icon ("iconClosed") like rotation */
+      animationBuilder: (child, isOpen) {
+        return AnimatedRotation(
+          turns: isOpen ? .5 : 0,
+          duration: Duration(milliseconds: 400),
+          child: child,
+        );
+      }
+    ```
+
+    ```dart
+      /* Example 2 : animation with two icons like switch */
+      dropdownButtonProps: DropdownButtonProps(
+        iconClosed: Icon(Icons.arrow_drop_down),
+        iconOpened: Icon(Icons.arrow_drop_up),
+        animationBuilder: (child, isOpen) {
+          return AnimatedSwitcher(
+            switchOutCurve: Curves.easeIn,
+            switchInCurve: Curves.easeIn,
+            duration: Duration(milliseconds: 400),
+            child: child,
+          );
+        },
+      )
+    ```
+  * add `SuggestionsProps` to `popupProps`
+  * add `builder` property for `SuggestionsProps` to override the hole suggestion widget
+  * add properties to `scrollView` and `wrap` widget for selected items in multiSelection mode
+  * `Chips` are fully customizable in multiSelection and suggestions
+  * replace `padding` in `searchFieldProps` with `containerBuilder`
+  * add `onDisplayed` callback to `popupProps`
+  * add `errorBuilder` for `InfiniteScrollProps`
+  * add possibility to reload item using `myGlobalKey.currentState?.reloadItems(String filter)` or `myGlobalKey.currentState?.loadMoreItems(String filter, int skip)`
+
+* #### Breaking changes
+  * change `onChanged` to `onSelected`
+  * `suggestedItemsProps` is placed inside `SuggestionsProps`
+  * `Semantics` is removed from searchBox, to add it use `containerBuilder` like this you have full access to Semantic properties.
+
 ## [6.0.1] - 2024.09.21
 * #### New Feature:
   * add `Semantics` to searchBox to support voiceOver/TalkBack ...

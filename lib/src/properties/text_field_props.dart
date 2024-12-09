@@ -1,15 +1,15 @@
 import 'dart:ui' as ui show BoxHeightStyle, BoxWidthStyle;
 
+import 'package:dropdown_search/src/properties/base_text_field_props.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 ///check [TextField] properties
-class TextFieldProps {
+class TextFieldProps extends BaseTextFieldProps {
   final FocusNode? focusNode;
   final bool enableIMEPersonalizedLearning;
   final Clip clipBehavior;
-  final TextEditingController? controller;
   final SmartDashesType? smartDashesType;
   final SmartQuotesType? smartQuotesType;
   final EditableTextContextMenuBuilder? contextMenuBuilder;
@@ -45,7 +45,6 @@ class TextFieldProps {
   final ui.BoxWidthStyle selectionWidthStyle;
   final Brightness? keyboardAppearance;
   final EdgeInsets scrollPadding;
-  final EdgeInsets padding;
   final bool enableInteractiveSelection;
   final TextSelectionControls? selectionControls;
   final DragStartBehavior dragStartBehavior;
@@ -67,17 +66,20 @@ class TextFieldProps {
   final bool scribbleEnabled;
   final UndoHistoryController? undoController;
   final SpellCheckConfiguration? spellCheckConfiguration;
-  final ValueChanged<String>? onChanged;
+  final ValueChanged<String>? onSelected;
   final VoidCallback? onEditingComplete;
   final ValueChanged<String>? onSubmitted;
   final bool onTapAlwaysCalled;
+  final Object groupId;
 
   const TextFieldProps({
+    this.groupId = EditableText,
+    super.controller,
+    super.containerBuilder,
     this.onSubmitted,
     this.onTapAlwaysCalled = false,
     this.onEditingComplete,
-    this.onChanged,
-    this.controller,
+    this.onSelected,
     this.decoration = const InputDecoration(border: OutlineInputBorder()),
     this.keyboardType,
     this.textInputAction,
@@ -88,7 +90,7 @@ class TextFieldProps {
     this.textAlignVertical,
     this.textDirection,
     this.readOnly = false,
-    this.contextMenuBuilder,
+    this.contextMenuBuilder = _defaultContextMenuBuilder,
     this.showCursor,
     this.autofocus = false,
     this.obscuringCharacter = '•',
@@ -113,7 +115,6 @@ class TextFieldProps {
     this.selectionWidthStyle = ui.BoxWidthStyle.tight,
     this.keyboardAppearance,
     this.scrollPadding = const EdgeInsets.all(20.0),
-    this.padding = const EdgeInsets.all(8.0),
     this.dragStartBehavior = DragStartBehavior.start,
     this.enableInteractiveSelection = true,
     this.selectionControls,
@@ -139,4 +140,10 @@ class TextFieldProps {
     this.spellCheckConfiguration,
     this.undoController,
   });
+
+  static Widget _defaultContextMenuBuilder(BuildContext context, EditableTextState editableTextState) {
+    return AdaptiveTextSelectionToolbar.editableText(
+      editableTextState: editableTextState,
+    );
+  }
 }
